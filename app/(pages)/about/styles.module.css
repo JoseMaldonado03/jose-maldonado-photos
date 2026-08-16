@@ -1,0 +1,16 @@
+.title {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  color: #000000;
+  font-family: var(--font-main);
+}
+
+.me {
+  width: 500px;
+  height: auto;
+  border-radius: 5px;
+}
+.me2 {
+  color: #765f5f;
+}

@@ -1,0 +1,16 @@
+.footer {
+  z-index: 100;
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  text-align: center;
+  left: 40px;
+  right: 40px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
