@@ -15,7 +15,13 @@ const sectionLinks = [
   { href: "/maps", label: "Mapa" },
 ];
 
-export default function NavBar() {
+interface NavBarProps {
+  color?: string;
+}
+
+export default function NavBar(props: NavBarProps) {
+  const color = props.color || "white";
+
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -35,7 +41,9 @@ export default function NavBar() {
   return (
     <header className={classes.header}>
       <Link href="/" className={classes.brand} onClick={closeMenu}>
-        <span className={classes.name}>José Maldonado</span>
+        <span className={classes.name} style={{ color }}>
+          José Maldonado
+        </span>
       </Link>
 
       <nav className={classes.desktopNav}>

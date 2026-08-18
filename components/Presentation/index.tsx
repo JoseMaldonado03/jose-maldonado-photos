@@ -4,10 +4,12 @@ import Footer from "@/components/Footer";
 import classes from "./styles.module.css";
 
 import MenuBox from "../MenuBox";
+import NavBar from "../NavBar";
 
 export default function Presentation() {
   return (
     <section className={classes.hero}>
+      <NavBar />
       <Image
         src="/Background.jpg"
         alt="Background"

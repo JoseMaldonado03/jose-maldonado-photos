@@ -1,5 +1,6 @@
 import Container from "@/components/Container";
 import Footer from "@/components/Footer";
+import NavBar from "@/components/NavBar";
 
 export default function PageLayout({
   children,
@@ -8,9 +9,10 @@ export default function PageLayout({
 }>) {
   return (
     <div>
+      <NavBar color="#fffefe" />
       <Container>
         {children}
-        <Footer color="black" />
+        <Footer color="#ffffff" />
       </Container>
     </div>
   );

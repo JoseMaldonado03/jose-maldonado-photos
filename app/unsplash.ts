@@ -1,3 +1,5 @@
+import { CollectionPhotos } from "./unsplash.types";
+
 const API_URL = "https://api.unsplash.com";
 
 const headers = {
@@ -5,7 +7,7 @@ const headers = {
 };
 
 export async function getUnsplashData<T>(path: string): Promise<T> {
-  const datos = await fetch(`${API_URL}/${path}?per_page=100`, {
+  const datos = await fetch(`${API_URL}/${path}`, {
     headers,
     next: {
       revalidate: 24 * 60 * 60,
@@ -15,4 +17,22 @@ export async function getUnsplashData<T>(path: string): Promise<T> {
   const json = await datos.json();
 
   return json;
+}
+
+export async function getCollection(collectionId: string) {
+  const collectionDetails = await getUnsplashData<{ total_photos: number }>(
+    `collections/${collectionId}`,
+  );
+
+  const photos = [];
+
+  for (let i = 1; photos.length < collectionDetails.total_photos; i++) {
+    const collectionPhotos = await getUnsplashData<CollectionPhotos>(
+      `collections/${collectionId}/photos?page=${i}`,
+    );
+
+    photos.push(...collectionPhotos);
+  }
+
+  return photos;
 }

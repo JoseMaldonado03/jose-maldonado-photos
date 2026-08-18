@@ -2,8 +2,13 @@
 
 import Maps from "@/components/Maps";
 
-import classes from "./styles.module.css";
+import NavBar from "@/components/NavBar";
 
 export default function MapsPage() {
-  return <Maps />;
+  return (
+    <>
+      <NavBar />
+      <Maps />
+    </>
+  );
 }
