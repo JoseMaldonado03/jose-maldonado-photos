@@ -51,5 +51,6 @@
   .text {
     font-size: 120%;
     padding: 10px;
+    margin-bottom: 70px;
   }
 }
