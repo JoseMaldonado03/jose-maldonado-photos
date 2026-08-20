@@ -5,14 +5,14 @@
   align-items: center;
   min-height: 70px;
   padding: 0 32px;
-  width: 100%;
-  margin-top: 10px;
+  max-width: 100%;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
   border-radius: 10px;
   font-family: var(--font-main);
   color: #949393;
   box-sizing: border-box;
+  margin: 20px;
 }
 
 .brand {
@@ -30,56 +30,27 @@
   color: #ffffff;
 }
 
-.desktopNav {
-  display: flex;
+.menuButton {
+  display: grid;
   margin-left: auto;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: #707070;
+  font-size: 28.8px;
+  cursor: pointer;
 }
 
-.menuButton,
 .mobileNav {
-  display: none;
-  color: #fff;
-}
-
-@media (max-width: 956px) {
-  .header {
-    width: fit-content;
-    min-height: auto;
-    margin-left: auto;
-    margin-right: 30px;
-    padding: 0;
-    z-index: 500;
-  }
-
-  .name {
-    display: none;
-  }
-
-  .desktopNav {
-    display: none;
-  }
-
-  .menuButton {
-    display: grid;
-    margin-left: auto;
-    padding: 8px;
-    border: 0;
-    background: transparent;
-    color: #a4a1a1;
-    font-size: 28.8px;
-    cursor: pointer;
-  }
-
-  .mobileNav {
-    position: absolute;
-    top: 100%;
-    right: 16px;
-    display: flex;
-    flex-direction: column;
-    width: 200px;
-    padding: 8px;
-    background-color: #fff;
-    box-shadow: 0 10px 25px rgb(0 0 0 / 15%);
-    border-radius: 10px;
-  }
+  position: absolute;
+  top: 100%;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  padding: 8px;
+  padding-bottom: 0%;
+  background-color: #fff;
+  box-shadow: 0 10px 25px rgb(0 0 0 / 15%);
+  border-radius: 10px;
 }

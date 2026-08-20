@@ -7,24 +7,32 @@ const headers = {
 };
 
 export async function getUnsplashData<T>(path: string): Promise<T> {
-  const datos = await fetch(`${API_URL}/${path}`, {
-    headers,
-    next: {
-      revalidate: 60 * 60,
-    },
-  });
+  try {
+    const datos = await fetch(`${API_URL}/${path}`, {
+      headers,
+      next: {
+        revalidate: 60 * 60,
+      },
+    });
 
-  const json = await datos.json();
+    const json = await datos.json();
 
-  return json;
+    return json;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-export async function getCollection(collectionId: string) {
+export async function getCollectionPhotos(collectionId: string) {
   const collectionDetails = await getUnsplashData<{ total_photos: number }>(
     `collections/${collectionId}`,
   );
 
-  const photos = [];
+  const photos: CollectionPhotos = [];
+
+  if (collectionDetails.total_photos <= 0) {
+    return photos;
+  }
 
   for (let i = 1; photos.length < collectionDetails.total_photos; i++) {
     const collectionPhotos = await getUnsplashData<CollectionPhotos>(
@@ -35,4 +43,15 @@ export async function getCollection(collectionId: string) {
   }
 
   return photos;
+}
+
+export async function getCollection(collectionId: string) {
+  const collectionDetails = await getUnsplashData<{
+    title: string;
+    total_photos: number;
+    description: string;
+    updated_at: string;
+  }>(`collections/${collectionId}`);
+
+  return collectionDetails;
 }

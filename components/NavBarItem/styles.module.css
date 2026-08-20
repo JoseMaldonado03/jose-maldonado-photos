@@ -5,6 +5,7 @@
   transition: background-color 0.2s ease;
   border-radius: 10px;
   background-color: rgb(157, 155, 155);
+  margin-bottom: 10px;
 }
 
 .item:hover {

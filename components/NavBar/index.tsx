@@ -46,10 +46,6 @@ export default function NavBar(props: NavBarProps) {
         </span>
       </Link>
 
-      <nav className={classes.desktopNav}>
-        {!isHome && <NavBarItem href="/" label="Inicio" />}
-      </nav>
-
       <button
         type="button"
         className={classes.menuButton}
