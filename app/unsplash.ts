@@ -10,7 +10,7 @@ export async function getUnsplashData<T>(path: string): Promise<T> {
   const datos = await fetch(`${API_URL}/${path}`, {
     headers,
     next: {
-      revalidate: 24 * 60 * 60,
+      revalidate: 60 * 60,
     },
   });
 
