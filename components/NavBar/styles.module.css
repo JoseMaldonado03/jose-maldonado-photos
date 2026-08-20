@@ -5,14 +5,14 @@
   align-items: center;
   min-height: 70px;
   padding: 0 32px;
-  width: 50%;
-  margin-left: 40%;
+  width: 100%;
   margin-top: 10px;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
   border-radius: 10px;
   font-family: var(--font-main);
   color: #949393;
+  box-sizing: border-box;
 }
 
 .brand {
@@ -33,12 +33,6 @@
 .desktopNav {
   display: flex;
   margin-left: auto;
-  background-color: rgb(157, 155, 155);
-  border-radius: 10px;
-
-  a {
-    color: rgb(248, 247, 247);
-  }
 }
 
 .menuButton,

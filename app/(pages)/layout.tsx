@@ -9,8 +9,8 @@ export default function PageLayout({
 }>) {
   return (
     <div>
-      <NavBar color="#fffefe" />
       <Container>
+        <NavBar color="#fffefe" />
         {children}
         <Footer color="#ffffff" />
       </Container>

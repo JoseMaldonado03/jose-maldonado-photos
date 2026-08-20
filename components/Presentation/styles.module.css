@@ -13,6 +13,15 @@
   position: absolute;
   inset: 0;
 }
+
+.mobileNav {
+  display: block;
+
+  @media (min-width: 956px) {
+    display: none;
+  }
+}
+
 @media (max-width: 956px) {
   .overlay {
     display: none;

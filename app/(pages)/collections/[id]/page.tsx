@@ -1,7 +1,6 @@
 import Image from "next/image";
 
-import { getCollection, getUnsplashData } from "@/app/unsplash";
-import { CollectionPhotos } from "@/app/unsplash.types";
+import { getCollection } from "@/app/unsplash";
 
 import classes from "./styles.module.css";
 
@@ -17,12 +16,15 @@ export default async function CollectionPage({
   return (
     <main className={classes.gallery}>
       {photos.map((photo) => (
-        <img
-          key={photo.id}
-          className={classes.photo}
-          src={photo.urls.raw}
-          alt={photo.description}
-        />
+        <div key={photo.id} className={classes.item}>
+          <Image
+            className={classes.photo}
+            src={photo.urls.raw}
+            alt={photo.description ?? ""}
+            width={photo.width}
+            height={photo.height}
+          />
+        </div>
       ))}
     </main>
   );

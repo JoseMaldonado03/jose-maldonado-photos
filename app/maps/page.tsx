@@ -1,5 +1,6 @@
 "use client";
 
+import Container from "@/components/Container";
 import Maps from "@/components/Maps";
 
 import NavBar from "@/components/NavBar";
@@ -7,7 +8,9 @@ import NavBar from "@/components/NavBar";
 export default function MapsPage() {
   return (
     <>
-      <NavBar />
+      <Container>
+        <NavBar />
+      </Container>
       <Maps />
     </>
   );

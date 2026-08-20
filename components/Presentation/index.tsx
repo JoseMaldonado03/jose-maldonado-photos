@@ -5,11 +5,16 @@ import classes from "./styles.module.css";
 
 import MenuBox from "../MenuBox";
 import NavBar from "../NavBar";
+import Container from "../Container";
 
 export default function Presentation() {
   return (
     <section className={classes.hero}>
-      <NavBar />
+      <Container>
+        <div className={classes.mobileNav}>
+          <NavBar />
+        </div>
+      </Container>
       <Image
         src="/Background.jpg"
         alt="Background"
