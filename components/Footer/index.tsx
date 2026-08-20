@@ -1,9 +1,4 @@
-import {
-  FaGithub,
-  FaLinkedin,
-  FaSquareInstagram,
-  FaSquareWhatsapp,
-} from "react-icons/fa6";
+import { FaGithub, FaLinkedin, FaSquareInstagram } from "react-icons/fa6";
 import { BiLogoGmail } from "react-icons/bi";
 
 import classes from "./styles.module.css";
@@ -39,13 +34,6 @@ export default function Footer(props: FooterProps) {
           rel="noopener noreferrer"
         >
           <FaSquareInstagram size={20} color="white" />
-        </a>
-        <a
-          href="https://wa.me/5491168835423"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaSquareWhatsapp size={20} color="white" />
         </a>
         <a href="mailto:muso030397@gmail.com">
           {" "}
