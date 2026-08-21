@@ -19,8 +19,8 @@ export async function getUnsplashData<T>(path: string): Promise<T> {
 
     return json as T;
   } catch (error) {
+    console.error(error);
     return {} as T;
-    console.log(error);
   }
 }
 
