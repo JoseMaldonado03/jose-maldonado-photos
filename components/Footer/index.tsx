@@ -1,4 +1,4 @@
-import { FaGithub, FaLinkedin, FaSquareInstagram } from "react-icons/fa6";
+import { FaGithub, FaLinkedin, FaInstagram, FaUnsplash } from "react-icons/fa6";
 import { BiLogoGmail } from "react-icons/bi";
 
 import classes from "./styles.module.css";
@@ -29,11 +29,18 @@ export default function Footer(props: FooterProps) {
           <FaLinkedin size={20} color="white" />
         </a>
         <a
+          href="https://unsplash.com/es/@muso0397"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaUnsplash size={20} color="white" />
+        </a>
+        <a
           href="https://www.instagram.com/muso0397/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <FaSquareInstagram size={20} color="white" />
+          <FaInstagram size={20} color="white" />
         </a>
         <a href="mailto:muso030397@gmail.com">
           {" "}
