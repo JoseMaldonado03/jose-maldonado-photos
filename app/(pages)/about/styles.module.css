@@ -45,9 +45,11 @@
 .text {
   font-family: var(--font-main);
   font-size: 150%;
-  margin-bottom: 50px;
+  margin-bottom: 60px;
+  padding: 10px;
+  color: white;
 }
-@media (max-width: 768px) {
+@media (max-width: 850px) {
   .text {
     font-size: 120%;
     padding: 10px;
