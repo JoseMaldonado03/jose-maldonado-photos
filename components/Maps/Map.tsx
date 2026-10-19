@@ -57,30 +57,57 @@ type Collections = Record<string, CollectionCard>;
 
 function Markers({ collections }: { collections: Collections }) {
   const map = useMap();
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  // The id gives each opening a new key, so the popup remounts even for the same pin.
+  const [popup, setPopup] = useState<{ index: number; id: number } | null>(
+    null,
+  );
   const pending = useRef<number | null>(null);
+  const openings = useRef(0);
   const markerRefs = useRef<(L.Marker | null)[]>([]);
+
+  function openPopup(index: number) {
+    openings.current += 1;
+    setPopup({ index, id: openings.current });
+  }
 
   useMapEvents({
     // The popup opens only once the flight ends.
     moveend: () => {
       if (pending.current !== null) {
-        setSelectedIndex(pending.current);
+        openPopup(pending.current);
         pending.current = null;
       }
     },
   });
 
   function select(index: number) {
+    // Restarting the flight on every click would keep postponing the popup.
+    if (pending.current === index) return;
+
+    const { position } = markers[index];
+    const zoom = Math.max(map.getZoom(), FLY_ZOOM);
+    const distance = map
+      .project(map.getCenter(), zoom)
+      .distanceTo(map.project(position, zoom));
+
     bounce(markerRefs.current[index]?.getElement());
-    pending.current = index;
-    setSelectedIndex(null);
     map.closePopup();
-    map.flyTo(markers[index].position, Math.max(map.getZoom(), FLY_ZOOM), {
-      duration: 1.5,
-    });
+    setPopup(null);
+
+    if (zoom === map.getZoom() && distance < 5) {
+      pending.current = null;
+      openPopup(index);
+      return;
+    }
+
+    const { x, y } = map.getSize();
+    const isNear = zoom === map.getZoom() && distance < Math.max(x, y);
+
+    pending.current = index;
+    map.flyTo(position, zoom, { duration: isNear ? 0.8 : 1.5 });
   }
 
+  const selectedIndex = popup?.index ?? null;
   const selected = selectedIndex === null ? null : markers[selectedIndex];
   const card = selected?.collection ? collections[selected.collection] : null;
 
@@ -97,9 +124,9 @@ function Markers({ collections }: { collections: Collections }) {
           eventHandlers={{ click: () => select(index) }}
         />
       ))}
-      {selected && selectedIndex !== null && (
+      {popup && selected && selectedIndex !== null && (
         <Popup
-          key={selected.position.join()}
+          key={popup.id}
           position={selected.position}
           offset={[1, -27]}
           className={classes.popup}
