@@ -8,6 +8,13 @@
   justify-content: space-between;
   align-items: flex-start;
   color: white;
+
+  & h1 {
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
   &::before {
     position: absolute;
     width: 100%;
@@ -35,7 +42,7 @@
 .gallery {
   column-count: 1;
   column-gap: 1rem;
-  margin: 20px 20px 100px;
+  margin: 20px 20px 120px;
 }
 
 /* Media Queries para diseño responsivo */
@@ -51,6 +58,10 @@
   margin-bottom: 1rem;
   overflow: hidden;
   background-color: #f3f4f6;
+}
+
+.link {
+  display: block;
 }
 
 .photo {

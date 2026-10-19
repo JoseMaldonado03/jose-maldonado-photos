@@ -74,3 +74,23 @@ export async function getUserStatistics(username: string) {
     downloads: statistics.downloads.total,
   };
 }
+
+export async function getCollectionPhoto(
+  collectionId: string,
+  photoId: string,
+) {
+  const photos = await getCollectionPhotos(collectionId);
+  const index = photos.findIndex((photo) => photo.id === photoId);
+
+  if (index === -1) {
+    return null;
+  }
+
+  return {
+    photo: photos[index],
+    previousId: photos[index - 1]?.id ?? null,
+    nextId: photos[index + 1]?.id ?? null,
+    position: index + 1,
+    total: photos.length,
+  };
+}
