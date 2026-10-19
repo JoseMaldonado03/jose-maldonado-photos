@@ -67,7 +67,7 @@ export interface Links2 {
 }
 
 export interface Collection {
-  id: number;
+  id: string;
   title: string;
   description: string;
   published_at: string;

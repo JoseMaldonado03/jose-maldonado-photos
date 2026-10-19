@@ -1,8 +1,15 @@
 import Link from "next/link";
 
+import { getPhotoParams } from "@/app/unsplash";
 import PhotoViewer from "@/components/PhotoViewer";
 
 import classes from "./styles.module.css";
+
+export const revalidate = 86400;
+
+export async function generateStaticParams() {
+  return getPhotoParams();
+}
 
 export default async function PhotoPage({
   params,

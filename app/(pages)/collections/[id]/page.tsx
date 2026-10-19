@@ -1,9 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
-import { getCollection, getCollectionPhotos } from "@/app/unsplash";
+import {
+  getCollection,
+  getCollectionPhotos,
+  getUserCollections,
+} from "@/app/unsplash";
 
 import classes from "./styles.module.css";
+
+export const revalidate = 86400;
+
+export async function generateStaticParams() {
+  const collections = await getUserCollections();
+
+  return collections.map(({ id }) => ({ id }));
+}
 
 export default async function CollectionPage({
   params,
@@ -13,6 +26,11 @@ export default async function CollectionPage({
   const { id } = await params;
 
   const collection = await getCollection(id);
+
+  if (!collection) {
+    notFound();
+  }
+
   const photos = await getCollectionPhotos(id);
 
   return (

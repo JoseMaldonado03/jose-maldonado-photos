@@ -1,14 +1,13 @@
-import { getUnsplashData } from "@/app/unsplash";
-import { Collections } from "@/app/unsplash.types";
+import { getUserCollections } from "@/app/unsplash";
 import Link from "next/link";
 
 import classes from "./styles.module.css";
 import Image from "next/image";
 
+export const revalidate = 86400;
+
 export default async function Home() {
-  const collections = await getUnsplashData<Collections>(
-    "users/muso0397/collections",
-  );
+  const collections = await getUserCollections();
 
   return (
     <div className={classes.container}>
