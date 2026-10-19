@@ -1,9 +1,33 @@
 "use client";
 import L from "leaflet";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import Image from "next/image";
+import Link from "next/link";
+import { useRef, useState } from "react";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
+
+import type { CollectionCard } from "@/app/unsplash.types";
+import markersData from "@/map.json";
 
 import classes from "./styles.module.css";
 
+type MapMarker = {
+  position: [number, number];
+  title: string;
+  image: string;
+  collection: string;
+};
+
+const markers = markersData as MapMarker[];
+
+const FLY_ZOOM = 8;
 const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 const MAPBOX_USERID = process.env.NEXT_PUBLIC_MAPBOX_USERID;
 const MAPBOX_STYLEID = process.env.NEXT_PUBLIC_MAPBOX_STYLEID;
@@ -15,12 +39,136 @@ const customIcon = new L.Icon({
   popupAnchor: [1, -34],
 });
 
-export default function Maps() {
+function bounce(element: HTMLElement | undefined) {
+  if (!element) return;
+
+  element.classList.remove(classes.bounce);
+  // Reading offsetWidth forces a reflow so the animation restarts on repeated clicks.
+  void element.offsetWidth;
+  element.classList.add(classes.bounce);
+  element.addEventListener(
+    "animationend",
+    () => element.classList.remove(classes.bounce),
+    { once: true },
+  );
+}
+
+type Collections = Record<string, CollectionCard>;
+
+function Markers({ collections }: { collections: Collections }) {
+  const map = useMap();
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const pending = useRef<number | null>(null);
+  const markerRefs = useRef<(L.Marker | null)[]>([]);
+
+  useMapEvents({
+    // The popup opens only once the flight ends.
+    moveend: () => {
+      if (pending.current !== null) {
+        setSelectedIndex(pending.current);
+        pending.current = null;
+      }
+    },
+  });
+
+  function select(index: number) {
+    bounce(markerRefs.current[index]?.getElement());
+    pending.current = index;
+    setSelectedIndex(null);
+    map.closePopup();
+    map.flyTo(markers[index].position, Math.max(map.getZoom(), FLY_ZOOM), {
+      duration: 1.5,
+    });
+  }
+
+  const selected = selectedIndex === null ? null : markers[selectedIndex];
+  const card = selected?.collection ? collections[selected.collection] : null;
+
+  return (
+    <>
+      {markers.map((marker, index) => (
+        <Marker
+          key={marker.position.join()}
+          ref={(instance) => {
+            markerRefs.current[index] = instance;
+          }}
+          icon={customIcon}
+          position={marker.position}
+          eventHandlers={{ click: () => select(index) }}
+        />
+      ))}
+      {selected && selectedIndex !== null && (
+        <Popup
+          key={selected.position.join()}
+          position={selected.position}
+          offset={[1, -27]}
+          className={classes.popup}
+        >
+          <div className={classes.content}>
+            <div className={classes.header}>
+              <button
+                type="button"
+                className={classes.arrow}
+                onClick={() => select(selectedIndex - 1)}
+                disabled={selectedIndex === 0}
+                aria-label="Pin anterior"
+              >
+                <FiChevronLeft />
+              </button>
+              <span className={classes.title}>{selected.title}</span>
+              <button
+                type="button"
+                className={classes.arrow}
+                onClick={() => select(selectedIndex + 1)}
+                disabled={selectedIndex === markers.length - 1}
+                aria-label="Próximo pin"
+              >
+                <FiChevronRight />
+              </button>
+            </div>
+
+            {card ? (
+              <Link href={`/collections/${card.id}`} className={classes.card}>
+                <span
+                  className={classes.cover}
+                  style={{ backgroundColor: card.color }}
+                >
+                  <Image
+                    className={classes.coverImage}
+                    src={card.coverUrl}
+                    alt={card.title}
+                    fill
+                    sizes="220px"
+                  />
+                </span>
+                <span className={classes.cardTitle}>{card.title}</span>
+                <span className={classes.cardCount}>
+                  {card.totalPhotos} fotos
+                </span>
+              </Link>
+            ) : (
+              selected.image && (
+                <Image
+                  className={classes.image}
+                  src={selected.image}
+                  alt={selected.title}
+                  width={220}
+                  height={130}
+                />
+              )
+            )}
+          </div>
+        </Popup>
+      )}
+    </>
+  );
+}
+
+export default function Maps({ collections }: { collections: Collections }) {
   return (
     <MapContainer
       center={[-34.5876719, -58.4515826]}
       zoom={4}
-      scrollWheelZoom={false}
       attributionControl={false}
       className={classes.container}
     >
@@ -28,51 +176,7 @@ export default function Maps() {
         attribution='© <a href="https://apps.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url={`https://api.mapbox.com/styles/v1/${MAPBOX_USERID}/${MAPBOX_STYLEID}/tiles/512/{z}/{x}/{y}@2x?access_token=${MAPBOX_ACCESS_TOKEN}`}
       />
-      <Marker icon={customIcon} position={[-54.8068351, -68.3853746]}>
-        <Popup>Ushuaia</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[-12.9017521, -38.5027637]}>
-        <Popup>Salvador</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[-23.6820636, -46.9249425]}>
-        <Popup>São Paulo</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[-12.8801657, -41.3928278]}>
-        <Popup>Lençois</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[-12.7332594, -38.5116182]}>
-        <Popup>Caboto</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[-33.4726784, -70.7949816]}>
-        <Popup>Santiago</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[-33.0055221, -71.571455]}>
-        <Popup>Viña del Mar</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[-41.1282349, -71.5050635]}>
-        <Popup>Bariloche</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[-34.4486388, -57.8777606]}>
-        <Popup>Colonia del Sacramento</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[-34.6157959, -58.5158705]}>
-        <Popup>Buenos Aires</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[-38.0175379, -57.6829343]}>
-        <Popup>Mar del Plata</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[-31.399446, -64.2720448]}>
-        <Popup>Cordoba</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[8.5916679, -71.2144957]}>
-        <Popup>Mérida</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[4.6482784, -74.2726164]}>
-        <Popup>Bogotá</Popup>
-      </Marker>
-      <Marker icon={customIcon} position={[7.908758, -72.5456201]}>
-        <Popup>Cúcuta</Popup>
-      </Marker>
+      <Markers collections={collections} />
     </MapContainer>
   );
 }

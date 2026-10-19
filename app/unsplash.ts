@@ -1,4 +1,9 @@
-import { CollectionPhotos, UserStatistics } from "./unsplash.types";
+import {
+  Collection,
+  CollectionCard,
+  CollectionPhotos,
+  UserStatistics,
+} from "./unsplash.types";
 
 const API_URL = "https://api.unsplash.com";
 
@@ -92,5 +97,25 @@ export async function getCollectionPhoto(
     nextId: photos[index + 1]?.id ?? null,
     position: index + 1,
     total: photos.length,
+  };
+}
+
+export async function getCollectionCard(
+  collectionId: string,
+): Promise<CollectionCard | null> {
+  const collection = await getUnsplashData<Collection>(
+    `collections/${collectionId}`,
+  );
+
+  if (!collection.cover_photo) {
+    return null;
+  }
+
+  return {
+    id: collectionId,
+    title: collection.title,
+    totalPhotos: collection.total_photos,
+    coverUrl: collection.cover_photo.urls.regular,
+    color: collection.cover_photo.color,
   };
 }

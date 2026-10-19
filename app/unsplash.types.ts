@@ -171,3 +171,11 @@ export interface UserStatistics {
   views: { total: number };
   likes: { total: number };
 }
+
+export interface CollectionCard {
+  id: string;
+  title: string;
+  totalPhotos: number;
+  coverUrl: string;
+  color: string;
+}
