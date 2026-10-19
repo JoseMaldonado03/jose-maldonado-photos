@@ -12,13 +12,19 @@ export default async function Home() {
 
   return (
     <div className={classes.container}>
-      {collections.map((collection) => (
+      {collections.map((collection, index) => (
         <Link key={collection.id} href={`/collections/${collection.id}`}>
-          <div className={classes.card}>
+          <div
+            className={classes.card}
+            style={{ backgroundColor: collection.cover_photo.color }}
+          >
             <Image
-              src={collection.cover_photo.urls.raw}
+              src={collection.cover_photo.urls.regular}
               alt={collection.title}
               fill
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              loading={index < 2 ? "eager" : "lazy"}
+              fetchPriority={index < 2 ? "high" : "auto"}
             />
 
             <div className={classes.overlay}>
