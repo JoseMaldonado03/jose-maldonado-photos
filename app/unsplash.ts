@@ -1,3 +1,4 @@
+import { PHASE_PRODUCTION_BUILD } from "next/constants";
 import { cache } from "react";
 
 import { fetchJson } from "@/lib/http";
@@ -35,13 +36,22 @@ const MAX_PAGES = 20;
 
 const VALID_ID = /^[\w-]{1,64}$/;
 
+// A separate token lets builds (previews, CI) spend their own quota instead of production's.
+function getToken() {
+  const isBuild = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD;
+
+  return (
+    (isBuild && process.env.CI_UNSPLASH_TOKEN) || process.env.UNSPLASH_TOKEN
+  );
+}
+
 function getUnsplashData<T>(
   path: string,
   id: string,
   failFast = true,
 ): Promise<T | null> {
   return fetchJson<T>(`${API_URL}/${path}`, {
-    headers: { Authorization: `Client-ID ${process.env.UNSPLASH_TOKEN}` },
+    headers: { Authorization: `Client-ID ${getToken()}` },
     id,
     revalidate: REVALIDATE,
     failFastStatuses: failFast ? FAIL_FAST_STATUSES : undefined,

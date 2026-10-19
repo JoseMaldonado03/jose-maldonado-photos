@@ -24,6 +24,8 @@ come from the Unsplash account `muso0397`; there is no database or CMS.
 - No test suite. Verify with `npm run lint` + `npm run build`, and for
   behavior, `npm run dev` and open the route manually.
 - Env vars (`.env*` is gitignored): `UNSPLASH_TOKEN` (server),
+  `CI_UNSPLASH_TOKEN` (optional; used instead of `UNSPLASH_TOKEN` during
+  `next build` so builds don't spend production's quota),
   `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN`, `NEXT_PUBLIC_MAPBOX_USERID`,
   `NEXT_PUBLIC_MAPBOX_STYLEID` (map tiles).
 
