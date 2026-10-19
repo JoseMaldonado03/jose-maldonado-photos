@@ -1,21 +1,17 @@
 .box {
   position: absolute;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  padding: 10px;
+  padding: max(6px, 0.72cqw);
   color: white;
   text-decoration: none;
-  font-size: 25px;
+  font-size: max(14px, 1.79cqw);
   font-weight: 700;
   border-color: white;
   border-style: solid;
   transition: all 0.3s ease;
-}
-@media (max-width: 1024px) {
-  .box {
-    font-size: 22px;
-  }
 }
 
 .box:hover {

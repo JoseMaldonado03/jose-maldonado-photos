@@ -15,23 +15,29 @@ export default function Presentation() {
           <NavBar />
         </div>
       </Container>
-      <Image
-        src="/Background.jpg"
-        alt="Background"
-        fill
-        priority
-        className={classes.image}
-        unoptimized
-      />
-
-      <div className={classes.overlay}>
-        <MenuBox title="Sobre mi" href="/about" className={classes.aboutBox} />
-        <MenuBox
-          title="Colecciones"
-          href="/collections"
-          className={classes.collectionBox}
+      <div className={classes.stage}>
+        <Image
+          src="/Background.jpg"
+          alt="Background"
+          fill
+          priority
+          className={classes.image}
+          unoptimized
         />
-        <MenuBox title="Mapa" href="/maps" className={classes.mapsBox} />
+
+        <div className={classes.overlay}>
+          <MenuBox
+            title="Sobre mi"
+            href="/about"
+            className={classes.aboutBox}
+          />
+          <MenuBox
+            title="Colecciones"
+            href="/collections"
+            className={classes.collectionBox}
+          />
+          <MenuBox title="Mapa" href="/maps" className={classes.mapsBox} />
+        </div>
       </div>
 
       <Footer color="white" />
