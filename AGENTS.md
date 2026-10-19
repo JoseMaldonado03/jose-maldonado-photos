@@ -48,11 +48,17 @@ Next.js App Router, mostly Server Components.
   Footer). [`app/maps/page.tsx`](app/maps/page.tsx) sits **outside** that group
   so it has no shared layout and renders its own Container/NavBar (the map is
   full-bleed).
-- Data: [`app/unsplash.ts`](app/unsplash.ts) is the only data layer.
-  `getUnsplashData<T>` wraps `fetch` (ISR `revalidate: 1h`, errors caught and
-  logged); `getCollection` / `getCollectionPhotos` build on it. API response
-  types live in [`app/unsplash.types.ts`](app/unsplash.types.ts) (pasted from
-  the API; has duplicate-named interfaces that merge).
+- Data: [`app/unsplash.ts`](app/unsplash.ts) is the only data layer, on top of
+  the resilient [`lib/http.ts`](lib/http.ts) `fetchJson` (5s timeout, errors
+  logged, `null` on failure, `failFastStatuses` throws on 401/403). Unsplash's
+  demo tier allows 50 requests/hour, so everything is cached for 24h
+  (`REVALIDATE`) and the collection/photo pages are prerendered at build
+  (`generateStaticParams`) and kept as ISR (`revalidate = 86400`). Lists are
+  walked with `per_page=30`; single collections/cards come from the cached
+  collections list (no per-collection request); ids are validated against it, so
+  unknown ids 404 without spending quota. API response types live in
+  [`app/unsplash.types.ts`](app/unsplash.types.ts) (pasted from the API; has
+  duplicate-named interfaces that merge).
 - Images: Unsplash photos go through `next/image`; the host is allowed in
   [`next.config.ts`](next.config.ts) `images.remotePatterns`. Local assets
   (`Background.jpg`, `me.jpg`, `descarga.png` map marker) are in `public/`.
@@ -92,10 +98,11 @@ Next.js App Router, mostly Server Components.
 
 ## Gotchas
 
-- `getUnsplashData` returns `{} as T` on failure, so callers that expect an
-  array (e.g. `collections.map` in the collections page) throw when Unsplash is
-  down or rate-limited. `getCollectionPhotos` loops until it has
-  `total_photos` items and would spin forever if a page comes back empty.
+- A rate-limited or invalid `UNSPLASH_TOKEN` (401/403) fails `next build` on
+  purpose instead of caching empty pages for 24h. List helpers also throw when a
+  request fails; at runtime Next then keeps serving the last good page. Avoid
+  repeated cold builds: a build with an empty `.next/cache/fetch-cache` spends
+  ~25 of the 50 hourly requests.
 - Tailwind v4 is installed (`@tailwindcss/postcss`) but `app/globals.css` does
   not `@import "tailwindcss"`, so utility classes like `h-full` in the root
   layout currently have no effect. Style with CSS Modules.
