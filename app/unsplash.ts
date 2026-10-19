@@ -1,4 +1,4 @@
-import { CollectionPhotos } from "./unsplash.types";
+import { CollectionPhotos, UserStatistics } from "./unsplash.types";
 
 const API_URL = "https://api.unsplash.com";
 
@@ -55,4 +55,22 @@ export async function getCollection(collectionId: string) {
   }>(`collections/${collectionId}`);
 
   return collectionDetails;
+}
+
+export async function getUserStatistics(username: string) {
+  const statistics = await getUnsplashData<Partial<UserStatistics>>(
+    `users/${username}/statistics`,
+  );
+
+  if (
+    typeof statistics.views?.total !== "number" ||
+    typeof statistics.downloads?.total !== "number"
+  ) {
+    return null;
+  }
+
+  return {
+    views: statistics.views.total,
+    downloads: statistics.downloads.total,
+  };
 }

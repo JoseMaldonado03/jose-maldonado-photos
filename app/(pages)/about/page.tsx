@@ -1,7 +1,13 @@
 import Image from "next/image";
+import { FiDownload, FiEye } from "react-icons/fi";
+
+import { getUserStatistics } from "@/app/unsplash";
+
 import classes from "./styles.module.css";
 
-export default function about() {
+export default async function about() {
+  const statistics = await getUserStatistics("muso0397");
+
   return (
     <div>
       <h1 className={classes.title}>
@@ -48,6 +54,20 @@ export default function about() {
           Porque, al final, crear también es aprender a mirar.
         </p>
       </div>
+      {statistics && (
+        <dl className={classes.stats}>
+          <div className={classes.stat}>
+            <FiEye className={classes.icon} aria-hidden />
+            <dt>Vistas</dt>
+            <dd>{statistics.views.toLocaleString("es-AR")}</dd>
+          </div>
+          <div className={classes.stat}>
+            <FiDownload className={classes.icon} aria-hidden />
+            <dt>Descargas</dt>
+            <dd>{statistics.downloads.toLocaleString("es-AR")}</dd>
+          </div>
+        </dl>
+      )}
     </div>
   );
 }

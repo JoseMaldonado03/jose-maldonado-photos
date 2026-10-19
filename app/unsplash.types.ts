@@ -164,3 +164,10 @@ export interface Links4 {
 }
 
 export type Collections = Collection[];
+
+export interface UserStatistics {
+  username: string;
+  downloads: { total: number };
+  views: { total: number };
+  likes: { total: number };
+}
