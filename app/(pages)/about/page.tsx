@@ -34,13 +34,6 @@ export default async function about() {
           simplemente una escena cotidiana que, por un instante, adquiere algo
           especial. <br />
           <br />
-          También encontré en la tecnología otra forma de crear. Comencé mi
-          camino en el desarrollo web y fui aprendiendo JavaScript, React,
-          Next.js, TypeScript y otras herramientas que me permiten transformar
-          ideas en experiencias digitales. Para mí, programar y crear arte no
-          son mundos separados; ambos parten de la misma necesidad de construir,
-          experimentar y encontrar una manera propia de expresar algo. <br />{" "}
-          <br />
           Mi recorrido también ha estado marcado por los cambios. Nací y crecí
           en Venezuela y posteriormente emprendí un viaje conociendo diversos
           paises extraordinarios tales como: Colombia, Brasil, Uruguay, Chile y
